@@ -15,7 +15,7 @@ export class ReplService {
     const frames = ['', '.', '..', '...'];
     return setInterval(() => {
       const frame = frames[Math.floor(Date.now() / 500) % frames.length];
-      process.stdout.write(`\r\x1b[32mTyping${frame}   \x1b[0m`);
+      process.stdout.write(`\r\x1b[32m🤖 Typing${frame}   \x1b[0m`);
     }, 100);
   }
 
