@@ -7,13 +7,16 @@ import {
 } from '@nestjs/websockets';
 import { ChatService } from './chat.service';
 import { Socket } from 'socket.io';
+import { Logger } from '@nestjs/common';
 
 @WebSocketGateway({ cors: true })
 export class ChatGateway implements OnGatewayConnection {
+  private readonly logger = new Logger(ChatGateway.name);
+
   constructor(private chatService: ChatService) {}
 
   handleConnection(client: Socket) {
-    console.log(`Client connected: ${client.id}`);
+    this.logger.log(`Client connected: ${client.id}`);
   }
 
   @SubscribeMessage('message')
@@ -24,10 +27,15 @@ export class ChatGateway implements OnGatewayConnection {
     },
     @ConnectedSocket() client: Socket,
   ) {
-    console.log(`Received message from ${client.id}: ${data.message}`);
+    this.logger.debug(`Received message from ${client.id}: ${data.message}`);
+
     const stream = this.chatService.streamReply(data.message, client.id);
+
     for await (const chunk of stream) {
-      console.log(chunk);
+      this.logger.debug(
+        `Received response for ${client.id}: ${JSON.stringify(chunk)}`,
+      );
+
       client.emit('response', chunk);
     }
   }
