@@ -46,6 +46,7 @@ This project is a simple chatbot application built using NestJS, Langchain, and 
         ```
         OPENROUTER_API_KEY=sk-or-v1-...
         PROTOCOL=REPL # or WEB for WebSocket interface
+        LLM_MODEL=deepseek/deepseek-r1:free # or any other supported model
         PORT=3000
         ```
 

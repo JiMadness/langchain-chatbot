@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ChatOpenAI } from '@langchain/openai';
+import * as process from 'node:process';
 
 @Injectable()
 export class LlmService {
@@ -11,7 +12,7 @@ export class LlmService {
       configuration: {
         baseURL: 'https://openrouter.ai/api/v1',
       },
-      model: 'deepseek/deepseek-r1:free',
+      model: process.env.LLM_MODEL,
     });
   }
 
