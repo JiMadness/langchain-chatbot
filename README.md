@@ -8,7 +8,7 @@ This project is a simple chatbot application built using NestJS, Langchain, and 
     -   **REPL (Read-Eval-Print Loop):** Engage with the chatbot directly from your terminal for quick testing and interactions.
     -   **WebSocket:** Integrate the chatbot into web applications to provide real-time, interactive chat experiences.
 -   **Langchain Integration:** Leverages the power of Langchain for creating and managing complex conversational flows and managing AI agents.
--   **OpenRouter API:** Utilizes the OpenRouter API to access various language models, in this case, `deepseek/deepseek-r1:free`, providing flexibility and access to cutting-edge AI.
+-   **OpenRouter API:** Utilizes the OpenRouter API to access various language models, in this case, providing flexibility and access to cutting-edge AI.
 -   **State Management:** Employs Langgraph's `StateGraph` and `MemorySaver` for managing the conversation state and maintaining context across interactions.
 -   **Asynchronous Streaming:** Supports asynchronous streaming of chatbot responses, allowing for dynamic, real-time updates in the WebSocket interface.
 -   **Modular Design:** Built with NestJS's modular architecture, promoting clean, maintainable, and scalable code.
@@ -103,8 +103,8 @@ This project is a simple chatbot application built using NestJS, Langchain, and 
 2.  **Server sends back (multiple times):**
 
     ```
-    { event: 'response', data: { chunk: 'Hello there!' } }
-    { event: 'response', data: { chunk: 'Yes, how can I help you?' } }
+    { event: 'response', data: { reply: 'Hello there!' } }
+    { event: 'response', data: { reply: 'Yes, how can I help you?' } }
     ```
 
 ## Further Development
