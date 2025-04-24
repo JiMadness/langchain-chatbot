@@ -19,23 +19,28 @@ async function bootstrap() {
 
     let threadId: string | undefined;
 
-    const ask = () => {
+    const ask = (threadId?: string) => {
       // eslint-disable-next-line @typescript-eslint/no-misused-promises
       reader.question('\x1b[34mYou: ', async (message: string) => {
-        const response = await chatService.getReply(message, threadId);
-        threadId = response.threadId;
-        reader.write(`\x1b[35mBot: ${response.reply}\n`);
-
-        ask();
+        try {
+          const response = await chatService.getReply(message, threadId);
+          threadId = response.threadId;
+          reader.write(`\x1b[35mBot: ${response.reply}\n\x1b[0m`);
+        } catch {
+          reader.write(
+            `\x1b[35mBot: I am currently facing technical issues at the moment. Please try again later.\n\x1b[0m`,
+          );
+        }
+        ask(threadId);
       });
     };
 
     console.log('Chatbot CLI is ready. Start chatting below:');
-    ask();
+    ask(threadId);
   } else {
     app.useWebSocketAdapter(new IoAdapter(app));
     await app.listen(process.env.PORT || 3000);
-    console.log('Chatbot is running on http://localhost:3000');
+    console.log(`Chatbot is running on ${await app.getUrl()}`);
   }
 }
 bootstrap();
