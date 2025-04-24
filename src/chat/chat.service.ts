@@ -45,12 +45,18 @@ export class ChatService {
     const messages = [{ role: 'user', content: input }];
     const output = await this.app.invoke({ messages }, config);
     return {
-      reply: output.messages[output.messages.length - 1].content,
+      reply: this.trimReply(
+        output.messages[output.messages.length - 1].content,
+      ),
       threadId: thread,
     };
   }
 
   async *streamReply(input: string, threadId?: string) {
     yield await this.getReply(input, threadId);
+  }
+
+  private trimReply(content: string): string {
+    return content.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
   }
 }

@@ -10,7 +10,7 @@ export class LlmService {
     this.model = new ChatOpenAI({
       openAIApiKey: process.env.OPENROUTER_API_KEY,
       configuration: {
-        baseURL: 'https://openrouter.ai/api/v1',
+        baseURL: process.env.OPENROUTER_BASE_URL,
       },
       model: process.env.LLM_MODEL,
     });
