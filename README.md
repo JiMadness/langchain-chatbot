@@ -47,6 +47,7 @@ This project is a simple chatbot application built using NestJS, Langchain, and 
         OPENROUTER_API_KEY=sk-or-v1-...
         PROTOCOL=REPL # or WEB for WebSocket interface
         LLM_MODEL=deepseek/deepseek-r1:free # or any other supported model
+        OPENROUTER_BASE_URL=https://llm.chutes.ai/v1 # or any other Open AI compatible URL
         PORT=3000
         ```
 
