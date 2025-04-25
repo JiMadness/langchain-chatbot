@@ -9,30 +9,53 @@ import {
   MessagesAnnotation,
 } from '@langchain/langgraph';
 import { LlmService } from './llm.service';
+import { RagService } from '../rag/rag.service';
 
 @Injectable()
 export class ChatService {
   private app: any;
   private memorySaver: MemorySaver;
 
-  constructor(private llmService: LlmService) {
+  constructor(
+    private readonly llmService: LlmService,
+    private readonly ragService: RagService,
+  ) {
     const promptTemplate = ChatPromptTemplate.fromMessages([
       [
         'system',
-        'You are a helpful assistant (Customer Service agent for Yassir). Answer all questions to the best of your ability.',
+        `You are a helpful assistant (Customer Service agent for ${process.env.PRODUCT_URL}).
+         Answer all questions to the best of your ability. Use the provided
+         context to answer the questions if you can. If the user is not talking
+         about the context, don't use the context to answer. 
+         Don't add any information on your own or share your personal opinion.
+         If you refer to the context, mention it as "my knowledge base".
+         Never mention the word "context".
+         Here is the context: {context}`,
       ],
       ['placeholder', '{messages}'],
     ]);
 
+    const retrieveContext = async (state: typeof MessagesAnnotation.State) => {
+      const message = state.messages[state.messages.length - 1];
+      const query = state.messages[state.messages.length - 1].content;
+      const context = await this.ragService.getContextForQuery(query as string);
+
+      message['context'] = context;
+    };
+
     const callModel = async (state: typeof MessagesAnnotation.State) => {
-      const prompt = await promptTemplate.invoke(state);
+      const context = state.messages[state.messages.length - 1]['context'];
+
+      const prompt = await promptTemplate.invoke({ ...state, context });
       const response = await this.llmService.getModel().invoke(prompt);
       return { messages: [...state.messages, response] };
     };
 
     const workflow = new StateGraph(MessagesAnnotation)
+      .addNode('context', retrieveContext)
       .addNode('model', callModel)
-      .addEdge(START, 'model')
+      .addEdge(START, 'context')
+      .addEdge('context', 'model')
       .addEdge('model', END);
 
     this.memorySaver = new MemorySaver();
