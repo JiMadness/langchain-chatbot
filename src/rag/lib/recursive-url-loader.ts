@@ -166,7 +166,7 @@ export class RecursiveUrlLoader
     try {
       res = await this.fetchWithTimeout(inputUrl, { timeout: this.timeout });
       res = await res.text();
-    } catch (e) {
+    } catch {
       return [];
     }
 
