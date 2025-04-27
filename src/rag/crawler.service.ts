@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { RecursiveUrlLoader } from '@langchain/community/document_loaders/web/recursive_url';
+import { RecursiveUrlLoader } from './lib/recursive-url-loader';
 import { Document } from '@langchain/core/documents';
 import { compile } from 'html-to-text';
 
@@ -17,6 +17,8 @@ export class CrawlerService {
     });
 
     const result = await loader.load();
+
+    console.log(result.map(doc => doc.metadata));
 
     return result;
   }
