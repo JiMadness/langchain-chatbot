@@ -101,6 +101,8 @@ It is built using NestJS, Langchain, LangGraph, and OpenRouter. It offers dual i
     -   `chat.module.ts`: Defines the chat module, importing and exporting its dependencies.
     -   `llm.service.ts`: Manages the connection to and interaction with the language model via the OpenRouter API.
 - `src/rag/`: Contains all the RAG-specific code.
+    - `lib/`: Contains library classes specific to RAG.
+      - `recursive-url-loader.ts`: A custom adaptation to Langchain's recursive url loader, with better crawling functionality.
     - `rag.service.ts`: Implements the core logic for interacting with RAG, storing data in a vector-store and returning data for llm.
     - `vector-store.service.ts`: Implements the logic for interacting with the vector store and embeddings.
     - `crawler.service.ts`: Implements the core logic for crawling websites for RAG.

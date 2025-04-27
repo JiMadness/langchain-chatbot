@@ -16,10 +16,6 @@ export class CrawlerService {
       preventOutside: true,
     });
 
-    const result = await loader.load();
-
-    console.log(result.map(doc => doc.metadata));
-
-    return result;
+    return await loader.load();
   }
 }
